@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install.sh - Instalação do OneDrive a partir do GitHub (compilação com LDC)
+# install.sh - Instalação do OneDrive compilando a partir do GitHub oficial
 
 install_onedrive() {
     print_info "Instalando OneDrive a partir do código-fonte oficial (GitHub)..."
@@ -33,7 +33,7 @@ install_onedrive() {
         cd "$SRC_DIR"
     fi
 
-    # 4. Força uso do LDC (opcional, mas garante)
+    # 4. Força uso do LDC
     export DC=ldc2
 
     # 5. Compila e instala

@@ -9,7 +9,7 @@ check_auth() {
         return 0
     else
         print_warn "Nenhum token de atualização encontrado."
-        print_info "Para autenticar, execute 'onedrive' e siga as instruções."
+        print_info "Para autenticar, execute 'onedrive' ou 'onedrive --auth-code' e siga as instruções."
         return 1
     fi
 }

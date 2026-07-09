@@ -1,60 +1,39 @@
 #!/usr/bin/env bash
-# aliases.sh - Aliases para facilitar o uso do OneDrive Manager
-# Requer: colors.sh
+# aliases.sh - Aliases para facilitar o uso do OneDrive
 
-# Marcadores idempotentes - imunes a mudanças no número de aliases
-readonly ALIAS_MARK_BEGIN="# BEGIN OneDrive Manager Aliases"
-readonly ALIAS_MARK_END="# END OneDrive Manager Aliases"
-
-# -------------------------------------------------------------------
-# add_aliases - Insere bloco de aliases no ~/.bashrc de forma idempotente
-# -------------------------------------------------------------------
 add_aliases() {
     local bashrc="$HOME/.bashrc"
-    local script_dir="${SCRIPT_DIR:-$HOME/.local/share/onedrive-manager}"
+    local alias_block="# Aliases do OneDrive Manager"
+    local aliases=(
+        "alias onedrive-status='systemctl --user status onedrive'"
+        "alias onedrive-sync='onedrive -s'"
+        "alias onedrive-resync='onedrive --resync'"
+        "alias onedrive-start='systemctl --user start onedrive'"
+        "alias onedrive-stop='systemctl --user stop onedrive'"
+        "alias onedrive-restart='systemctl --user restart onedrive'"
+        "alias onedrive-log='journalctl --user -u onedrive -f'"
+        "alias onedrive-folder='nautilus ~/OneDrive'"
+        "alias onedrive-update='$SCRIPT_DIR/update.sh'"
+    )
 
-    touch "$bashrc"
-
-    # Se já existe o bloco, remove antes de reinserir (permite atualizar)
-    if grep -Fq "$ALIAS_MARK_BEGIN" "$bashrc"; then
-        print_info "Aliases já existem - atualizando..."
-        remove_aliases
+    if grep -q "$alias_block" "$bashrc"; then
+        print_info "Aliases já configurados."
+        return
     fi
 
-    # Garante linha em branco antes do bloco (leitura fica mais limpa)
-    if [[ -s "$bashrc" && "$(tail -c1 "$bashrc")" != "" ]]; then
-        echo "" >> "$bashrc"
-    fi
+    echo "" >> "$bashrc"
+    echo "$alias_block" >> "$bashrc"
+    for alias in "${aliases[@]}"; do
+        echo "$alias" >> "$bashrc"
+    done
 
-    {
-        echo "$ALIAS_MARK_BEGIN"
-        echo "alias onedrive-status='systemctl --user status onedrive'"
-        echo "alias onedrive-sync='onedrive --synchronize --verbose'"
-        echo "alias onedrive-dryrun='onedrive --synchronize --dry-run --verbose'"
-        echo "alias onedrive-resync='onedrive --resync'"
-        echo "alias onedrive-start='systemctl --user start onedrive'"
-        echo "alias onedrive-stop='systemctl --user stop onedrive'"
-        echo "alias onedrive-restart='systemctl --user restart onedrive'"
-        echo "alias onedrive-log='journalctl --user -u onedrive -f'"
-        echo "alias onedrive-folder='xdg-open \"\$HOME/OneDrive\"'"
-        echo "alias onedrive-update='$script_dir/update.sh'"
-        echo "alias onedrive-manager='$script_dir/install.sh'"
-        echo "$ALIAS_MARK_END"
-    } >> "$bashrc"
-
-    print_success "Aliases adicionados ao $bashrc"
-    print_info "Rode 'source ~/.bashrc' ou abra um novo terminal para carregar."
+    print_success "Aliases adicionados ao ~/.bashrc"
 }
 
-# -------------------------------------------------------------------
-# remove_aliases - Remove bloco de aliases usando os marcadores
-# Imune a add/remove de novos aliases no futuro
-# -------------------------------------------------------------------
 remove_aliases() {
     local bashrc="$HOME/.bashrc"
-
-    if [[ ! -f "$bashrc" ]]; then
-        return 0
+    if [[ -f "$bashrc" ]]; then
+        sed -i '/# Aliases do OneDrive Manager/,+12d' "$bashrc"
+        print_info "Aliases removidos."
     fi
-
-    if ! grep -Fq "$ALIAS_MARK
+}
