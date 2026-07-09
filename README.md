@@ -11,7 +11,7 @@ Instalador profissional e modular para o cliente OneDrive (abraunegg) no Linux, 
 ```bash
 git clone https://github.com/kamuizada88/OneDrive-Manager.git
 cd OneDrive-Manager
-chmod +x *.sh
+chmod +x *.sh lib/*.sh
 ./install.sh
 ```
 
