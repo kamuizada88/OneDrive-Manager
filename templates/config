@@ -1,0 +1,3 @@
+# Modelo de configuração (já gerado dinamicamente, mantido para referência)
+sync_dir = "~/OneDrive"
+skip_file = "~*.tmp|~*.log|*.part"
