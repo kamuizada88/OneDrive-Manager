@@ -13,8 +13,6 @@ git clone https://github.com/kamuizada88/OneDrive-Manager.git
 cd OneDriveManager
 chmod +x *.sh
 ./install.sh
-
-## Autenticação
-Após a instalação, execute no terminal: onedrive
+```
 
 
